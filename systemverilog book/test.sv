@@ -42,3 +42,19 @@ task write(reg [15:0] addr, reg [31:0] data);
 	@(posedge clk)
 		PEnable <= 1'b0;
 endtask : write
+
+//Low-level verilog test
+module test(PAddr, PWrite, PSel, PWData, PEnable, Rst, clk);
+	//Omit the port decalration here.
+	//The task shown in example 1.2 is omitted here.
+	initial begin	
+		reset();				//Device reset.
+		write(16'h50, 32'h50);	//Write data to memory.
+
+	//Verify the results.
+	if(top.mem.memory[16'h50] ==32'h50)
+		$display("Succcess");
+	else
+		$display("Error, wrong value in memory");
+	$finish;
+endmodule : test
