@@ -25,3 +25,20 @@ module test(PAddr, PWrite, PSel, PWData, PEnable, Rst, clk);
 			$display("Error, wrong value in memory");
 	$finish;
 endmodule : test
+
+
+//A task applied to driving APB pins
+task write(reg [15:0] addr, reg [31:0] data);
+	//Driving control bus
+	@(posedge clk)
+	PAddr <= addr;
+	PWData <= data;
+	PWrite <= 1'b1;
+	PSel <= 1'b1;
+
+	//Flip PEnable
+	@(posedge clk)
+		PEnable <= 1'b1;
+	@(posedge clk)
+		PEnable <= 1'b0;
+endtask : write
