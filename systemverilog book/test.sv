@@ -58,3 +58,21 @@ module test(PAddr, PWrite, PSel, PWData, PEnable, Rst, clk);
 		$display("Error, wrong value in memory");
 	$finish;
 endmodule : test
+
+//Use foreach to traverse multidimensional arrays, one thing to note is “foreach(md(i,j))“。
+int md[2][3] = '{'{0,1,2}, '{3,4,5}};
+initial begin 
+	$display("Initial value:");
+	foreach(md[i,j]) begin
+		$display("md[%0d][%0d]=%0d",i,j,md[i][j]);
+	end
+	$display("New value:");
+	//
+	md = '{'{9,8,7}, '{3{32'd5}}};
+	foreach(md[i,j]) begin
+		$display("md[%0d][%0d] = %0d",i,j,md[i][j]);
+	end
+end
+
+//adding
+
