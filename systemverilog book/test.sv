@@ -74,5 +74,12 @@ initial begin
 	end
 end
 
-//adding  somthing。。。
-
+//
+struct packed{bit red, green, blue} c[];
+initial begin
+	c = new[100];
+	foreach(c[i]) begin
+		c[i] = $urandom;			//Fill in the random number.
+	end
+	c.sort with(item.red);
+end
