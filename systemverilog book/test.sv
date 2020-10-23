@@ -74,12 +74,34 @@ initial begin
 	end
 end
 
-//
-struct packed{bit red, green, blue} c[];
+//Sort structural arrays.
+struct packed {byte red, green, blue;} c[];
 initial begin
 	c = new[100];
 	foreach(c[i]) begin
 		c[i] = $urandom;			//Fill in the random number.
 	end
-	c.sort with(item.red);
+	c.sort with(item.red);			//Sort only red pixels.
+	c.sort(x) with(x.red, x.green);	//Sort red pixels first and then green pixels.
 end
+
+//Use array positioning to create scoreboards.
+typedef struct packed{
+	bit [7:0] addr;
+	bit [7:0] pr;
+	bit [15:0] data;
+} Packet;
+	Packet scb[$];
+
+	function void check_addr (bit [7:0] addr);
+		int intq[$];
+		intq = scb.find_index with (item.addr == addr);
+		case(int1.size):
+			0: $display("Addr %h not find in scoreboard", addr);
+			1: scb.delete(intq[0]);
+			default:$display("Error: Multiple hits for addr %h", addr);
+		endcase // int1.size
+	endfunction  
+
+
+	
